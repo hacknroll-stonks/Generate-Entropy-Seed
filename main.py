@@ -2,6 +2,7 @@ import random
 import binascii, hashlib, hmac, struct
 from ecdsa.curves import SECP256k1
 from eth_utils import to_checksum_address, keccak as eth_utils_keccak
+from Sensors import envRandom
 import segno
 
 BIP39_PBKDF2_ROUNDS = 2048
@@ -106,8 +107,8 @@ def get_mnemonic(bip39_words_list):
     randomLen = 256-missing
     ## TODO:
     ##      Add random Variance to add random numbers into the entropy
-
-    ran = ''.join([str(random.randint(0,1)) for i in range(randomLen)])
+    ran = envRandom(randomLen)
+    # ran = ''.join([str(random.randint(0,1)) for i in range(randomLen)])
 
     ##
     ##
@@ -135,7 +136,7 @@ def main():
     mnemonic = get_mnemonic(bip39_words_list)
     with open("Mnemonic.txt", "a") as mn:
         mn.write(mnemonic + "\n")
-        
+
     with open("Private_Keys.txt","a") as privateFile:
         with open("Address.txt", "a") as address:
             for path in PATHS:
